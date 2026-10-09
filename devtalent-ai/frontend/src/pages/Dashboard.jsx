@@ -37,7 +37,7 @@ function Dashboard({ children }) {
   } else {
     // Default to Developer Role layout
     navItems = navItems.concat([
-      { name: 'Capability Profiles', path: '#', icon: <FileCheck className="w-5 h-5 mr-3" /> },
+      { name: 'Capability Profiles', path: '/profile', icon: <FileCheck className="w-5 h-5 mr-3" /> },
       { name: 'Resumes', path: '/resumes', icon: <FileText className="w-5 h-5 mr-3" /> },
       { name: 'Assessments', path: '#', icon: <Code className="w-5 h-5 mr-3" /> },
     ]);
@@ -188,6 +188,21 @@ function Dashboard({ children }) {
                   </>
                 ) : (
                   <>
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 hover:border-emerald-200 transition-colors duration-300">
+                      <div className="flex items-center mb-6">
+                        <div className="bg-emerald-100 p-3 rounded-xl mr-4">
+                          <FileCheck className="w-6 h-6 text-emerald-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800">View Capability Profile</h3>
+                      </div>
+                      <p className="text-slate-500 mb-6 font-light leading-relaxed">
+                        Watch your AI-extracted metrics beautifully rendered on a visual dashboard to understand your placement.
+                      </p>
+                      <button onClick={() => navigate('/profile')} className="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold hover:bg-emerald-700 shadow-md transition-all">
+                        View Profile
+                      </button>
+                    </div>
+
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 hover:border-blue-200 transition-colors duration-300">
                       <div className="flex items-center mb-6">
                         <div className="bg-blue-100 p-3 rounded-xl mr-4">
@@ -200,21 +215,6 @@ function Dashboard({ children }) {
                       </p>
                       <button onClick={() => navigate('/resumes')} className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 shadow-md transition-all">
                         Upload Now
-                      </button>
-                    </div>
-                    
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 hover:border-indigo-200 transition-colors duration-300">
-                      <div className="flex items-center mb-6">
-                        <div className="bg-indigo-100 p-3 rounded-xl mr-4">
-                          <Code className="w-6 h-6 text-indigo-600" />
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-800">Add Technical Assessment (Phase 9)</h3>
-                      </div>
-                      <p className="text-slate-500 mb-6 font-light leading-relaxed">
-                        Create evidence-based, secure project simulations to automatically evaluate developer capability using AI analysis grids.
-                      </p>
-                      <button className="w-full bg-slate-100 text-slate-600 border border-slate-200 py-3 rounded-xl font-medium hover:bg-slate-200 transition-colors cursor-not-allowed opacity-70">
-                        Coming Soon
                       </button>
                     </div>
                   </>

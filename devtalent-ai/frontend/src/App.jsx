@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Resumes from './pages/Resumes';
 import Jobs from './pages/Jobs';
 import SemanticSearch from './pages/SemanticSearch';
+import CapabilityProfile from './pages/CapabilityProfile';
 
 function App() {
   return (
@@ -30,6 +31,16 @@ function App() {
               <ProtectedRoute allowedRoles={['developer']}>
                 <Dashboard>
                   <Resumes />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute allowedRoles={['developer']}>
+                <Dashboard>
+                  <CapabilityProfile />
                 </Dashboard>
               </ProtectedRoute>
             } 
