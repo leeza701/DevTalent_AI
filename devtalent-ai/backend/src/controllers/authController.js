@@ -39,7 +39,7 @@ exports.registerUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: 'Server error' });
   }
-};
+}
 
 
 exports.loginUser = async (req, res) => {
@@ -69,7 +69,7 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: 'Server error' });
   }
-};
+}
 
 
 exports.getMe = async (req, res) => {
@@ -79,4 +79,4 @@ exports.getMe = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: 'Server error' });
   }
-};
+}
