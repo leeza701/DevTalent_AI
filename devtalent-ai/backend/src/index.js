@@ -6,6 +6,8 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
+const jobRoutes = require('./routes/jobRoutes');
+const matchRoutes = require('./routes/matchRoutes');
 
 
 connectDB();
@@ -17,6 +19,8 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/matches', matchRoutes);
 
 app.get('/', (req, res) => {
   res.send('DevTalent AI Backend API is running');

@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Resumes from './pages/Resumes';
+import Jobs from './pages/Jobs';
+import SemanticSearch from './pages/SemanticSearch';
 
 function App() {
   return (
@@ -25,9 +27,29 @@ function App() {
           <Route 
             path="/resumes" 
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['developer']}>
                 <Dashboard>
                   <Resumes />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/jobs" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter']}>
+                <Dashboard>
+                  <Jobs />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/search" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter']}>
+                <Dashboard>
+                  <SemanticSearch />
                 </Dashboard>
               </ProtectedRoute>
             } 
