@@ -1,0 +1,44 @@
+remote: error: GH013: Repository rule violations found for refs/heads/main.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote:     Resolve the following violations before pushing again        
+remote: 
+remote:     - Push cannot contain secrets        
+remote: 
+remote:             
+remote:      (?) Learn how to resolve a blocked push        
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push        
+remote:             
+remote:             
+remote:       —— GCP API Key Bound to a Service Account ————————————        
+remote:        locations:        
+remote:          - commit: 1f883b7d86d7f4d95883209bf960dc9ac089ce74        
+remote:            path: devtalent-ai/backend/.env.example:6        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/leeza701/DevTalent_AI/security/secret-scanning/unblock-secret/3KRpUfUkF2y2Amgcz2T0CojXCYi        
+remote:             
+remote:             
+remote:       —— OpenAI API Key ————————————————————————————————————        
+remote:        locations:        
+remote:          - commit: be4bb6c7e91f8f069e63f96dd80000fcd8422c96        
+remote:            path: devtalent-ai/backend/.env.example:6        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/leeza701/DevTalent_AI/security/secret-scanning/unblock-secret/3KRlsvjf8OGrOsPaXjxRDzuR7iE        
+remote:             
+remote:             
+remote:       —— GCP API Key Bound to a Service Account ————————————        
+remote:        locations:        
+remote:          - commit: 979ac3ec5362ddd1f2259076cd0b29ad63b0d0b4        
+remote:            path: devtalent-ai/backend/.env.example:6        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/leeza701/DevTalent_AI/security/secret-scanning/unblock-secret/3KRnYcrLkaoVRPF3AwL9XTWc1Gu        
+remote:             
+remote: 
+remote: 
+To https://github.com/leeza701/DevTalent_AI.git
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/leeza701/DevTalent_AI.git'
