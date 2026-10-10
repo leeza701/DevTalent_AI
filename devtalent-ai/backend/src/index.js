@@ -8,6 +8,8 @@ const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const matchRoutes = require('./routes/matchRoutes');
+const assessmentRoutes = require('./routes/assessmentRoutes');
+const statsRoutes = require('./routes/statsRoutes');
 
 
 connectDB();
@@ -21,6 +23,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/matches', matchRoutes);
+app.use('/api/assessments', assessmentRoutes);
+app.use('/api/stats', statsRoutes);
 
 app.get('/', (req, res) => {
   res.send('DevTalent AI Backend API is running');

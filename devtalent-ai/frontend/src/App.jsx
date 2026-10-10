@@ -9,6 +9,11 @@ import Resumes from './pages/Resumes';
 import Jobs from './pages/Jobs';
 import SemanticSearch from './pages/SemanticSearch';
 import CapabilityProfile from './pages/CapabilityProfile';
+import Candidates from './pages/Candidates';
+import Assessments from './pages/Assessments';
+import CreateAssessment from './pages/CreateAssessment';
+import Analytics from './pages/Analytics';
+import TeamBuilder from './pages/TeamBuilder';
 
 function App() {
   return (
@@ -46,6 +51,16 @@ function App() {
             } 
           />
           <Route 
+            path="/assessments" 
+            element={
+              <ProtectedRoute allowedRoles={['developer']}>
+                <Dashboard>
+                  <Assessments />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/jobs" 
             element={
               <ProtectedRoute allowedRoles={['recruiter']}>
@@ -61,6 +76,46 @@ function App() {
               <ProtectedRoute allowedRoles={['recruiter']}>
                 <Dashboard>
                   <SemanticSearch />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/analytics" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter']}>
+                <Dashboard>
+                  <Analytics />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/team-builder" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter']}>
+                <Dashboard>
+                  <TeamBuilder />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/create-assessment" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter']}>
+                <Dashboard>
+                  <CreateAssessment />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/candidates" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter']}>
+                <Dashboard>
+                  <Candidates />
                 </Dashboard>
               </ProtectedRoute>
             } 

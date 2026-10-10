@@ -14,30 +14,40 @@ exports.uploadResume = async (req, res) => {
     const pdfData = await pdfParse(dataBuffer);
     const rawText = pdfData.text;
 
-    // SIMULATED MOCK AI ENGINE 
-    // We are generating a dummy result so the system functions perfectly without an API Key!
-    const parsedData = {
-      skills: ["JavaScript", "React", "Node.js", "Express", "MongoDB", "TailwindCSS"],
-      experience: [
-        {
-          title: "Senior Full-Stack Developer",
-          company: "Tech Innovations Inc.",
-          years: "2021 - Present"
-        },
-        {
-          title: "Software Engineer",
-          company: "Web Solutions LLC",
-          years: "2018 - 2021"
-        }
-      ],
-      education: [
-        {
-          degree: "B.S. in Computer Science",
-          institution: "University of Technology",
-          year: "2018"
-        }
-      ]
-    };
+    // LIVE AI ENGINE INTEGRATION
+    const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
+    const prompt = `
+      You are an expert technical recruiter AI. Please analyze the following resume text and extract the key information.
+      Return the output strictly as a valid JSON object with the following exact structure:
+      {
+        "skills": ["Array of technical skills and tools found"],
+        "experience": [
+          { "title": "Job Title", "company": "Company Name", "years": "Duration (e.g. 2018 - 2021)" }
+        ],
+        "education": [
+          { "degree": "Degree Name", "institution": "School/University", "year": "Graduation Year" }
+        ]
+      }
+      Do not include markdown blocks like \`\`\`json or any other text before/after it, just return the raw JSON object string.
+
+      RESUME TEXT:
+      ${rawText}
+    `;
+
+    const result = await model.generateContent(prompt);
+    let aiResponse = result.response.text();
+    
+    // Clean potential markdown blocks attached by Gemini
+    if (aiResponse.includes('\`\`\`json')) {
+      aiResponse = aiResponse.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
+    }
+    
+    let parsedData = { skills: [], experience: [], education: [] };
+    try {
+      parsedData = JSON.parse(aiResponse);
+    } catch (parseError) {
+      console.error("Failed to parse Gemini JSON:", parseError);
+    }
 
     const resume = await Resume.create({
       user: req.user.id,
@@ -56,8 +66,19 @@ exports.uploadResume = async (req, res) => {
 
 exports.getMyResumes = async (req, res) => {
   try {
-    const resumes = await Resume.find({ user: req.user.id }).sort('-createdAt');
+    const resumes = await Resume.find({ user: req.user.id }).sort('-processedAt');
     res.status(200).json({ success: true, count: resumes.length, data: resumes });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.getAllCandidates = async (req, res) => {
+  try {
+    // Populate the user field to get developer names and emails, but only fetch latest resumes realistically
+    // For simplicity, we just fetch all parsed resumes
+    const candidates = await Resume.find().populate('user', 'name email').sort('-processedAt');
+    res.status(200).json({ success: true, count: candidates.length, data: candidates });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
