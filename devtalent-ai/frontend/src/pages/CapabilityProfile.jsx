@@ -17,7 +17,7 @@ function CapabilityProfile() {
     try {
       setLoading(true);
       const token = localStorage.getItem('devtalent_token');
-      const response = await axios.get('http://localhost:5000/api/resumes/me', {
+      const response = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/resumes/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

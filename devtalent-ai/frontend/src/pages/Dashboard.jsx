@@ -13,7 +13,7 @@ function Dashboard({ children }) {
 
   useEffect(() => {
     // Check backend health
-    axios.get('http://localhost:5000/api/health')
+    axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/health`)
       .then(response => {
         if (response.data.status === 'ok') {
           setHealthStatus('Backend Connected: OK');
@@ -29,7 +29,7 @@ function Dashboard({ children }) {
       try {
         const token = localStorage.getItem('devtalent_token');
         if (token) {
-          const res = await axios.get('http://localhost:5000/api/stats', {
+          const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/stats`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (res.data.success) {

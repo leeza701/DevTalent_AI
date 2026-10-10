@@ -13,7 +13,7 @@ const Jobs = () => {
   const fetchJobs = async () => {
     try {
       const token = localStorage.getItem('devtalent_token');
-      const res = await axios.get('http://localhost:5000/api/jobs', {
+      const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/jobs`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setJobs(res.data.data);
@@ -35,7 +35,7 @@ const Jobs = () => {
     try {
       const token = localStorage.getItem('devtalent_token');
       await axios.post(
-        'http://localhost:5000/api/jobs',
+        `\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/jobs`,
         { title, company, originalDescription: description },
         { headers: { Authorization: `Bearer ${token}` } }
       );

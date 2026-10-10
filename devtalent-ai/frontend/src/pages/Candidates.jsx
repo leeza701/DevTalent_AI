@@ -16,7 +16,7 @@ function Candidates() {
     try {
       setLoading(true);
       const token = localStorage.getItem('devtalent_token');
-      const response = await axios.get('http://localhost:5000/api/resumes/all', {
+      const response = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/resumes/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.data) {

@@ -14,7 +14,7 @@ const SemanticSearch = () => {
     const fetchJobs = async () => {
       try {
         const token = localStorage.getItem('devtalent_token');
-        const res = await axios.get('http://localhost:5000/api/jobs', {
+        const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/jobs`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setJobs(res.data.data);
@@ -32,7 +32,7 @@ const SemanticSearch = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('devtalent_token');
-      const res = await axios.get(`http://localhost:5000/api/matches/${selectedJob}`, {
+      const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/matches/${selectedJob}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMatches(res.data.data);

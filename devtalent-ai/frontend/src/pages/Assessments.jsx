@@ -21,7 +21,7 @@ const Assessments = () => {
   const fetchAssessments = async () => {
     try {
       const token = localStorage.getItem('devtalent_token');
-      const res = await axios.get('http://localhost:5000/api/assessments/me', {
+      const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/assessments/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAssessments(res.data.data);
@@ -33,7 +33,7 @@ const Assessments = () => {
   const fetchCustomTracks = async () => {
     try {
       const token = localStorage.getItem('devtalent_token');
-      const res = await axios.get('http://localhost:5000/api/assessments/custom', {
+      const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/assessments/custom`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCustomTracks(res.data.data.map(custom => ({
@@ -88,7 +88,7 @@ const Assessments = () => {
   const finalizeScore = async () => {
     try {
       const token = localStorage.getItem('devtalent_token');
-      await axios.post('http://localhost:5000/api/assessments', 
+      await axios.post(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/assessments`, 
         { topic: activeTest.title, code: code },
         { headers: { Authorization: `Bearer ${token}` } }
       );

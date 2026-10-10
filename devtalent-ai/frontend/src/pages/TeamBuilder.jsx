@@ -41,6 +41,12 @@ const mockCandidates = {
 
 const TeamBuilder = () => {
   const [columns, setColumns] = useState(mockCandidates);
+  const [isReady, setIsReady] = useState(false);
+  
+  // Bypass React 18 StrictMode timing bugs with drag-and-drop
+  React.useEffect(() => {
+    setIsReady(true);
+  }, []);
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -71,6 +77,10 @@ const TeamBuilder = () => {
       });
     }
   };
+
+  if (!isReady) {
+    return <div className="p-8 text-center text-slate-500">Loading Kanban engine...</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -119,13 +129,14 @@ const TeamBuilder = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              className={`bg-white border rounded-xl p-4 flex gap-3 transition-all ${
+                              {...provided.dragHandleProps}
+                              className={`bg-white border rounded-xl p-4 flex gap-3 transition-all cursor-grab active:cursor-grabbing ${
                                 snapshot.isDragging 
                                   ? 'shadow-xl border-indigo-300 ring-2 ring-indigo-500/20 rotate-2 scale-105 opacity-90' 
                                   : 'border-slate-200 shadow-sm hover:-translate-y-1 hover:shadow-md'
                               }`}
                             >
-                              <div {...provided.dragHandleProps} className="text-slate-300 hover:text-indigo-500 cursor-grab flex items-center">
+                              <div className="text-slate-300 group-hover:text-indigo-500 flex items-center">
                                 <GripVertical className="w-5 h-5" />
                               </div>
                               <div className="flex-1">
