@@ -16,7 +16,7 @@ function Candidates() {
     try {
       setLoading(true);
       const token = localStorage.getItem('devtalent_token');
-      const response = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/resumes/all`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/resumes/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.data) {
@@ -53,23 +53,24 @@ function Candidates() {
     <div className="max-w-7xl mx-auto space-y-6">
       
       {/* Header and Search */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 rounded-3xl shadow-xl p-8 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000"></div>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
-            <h2 className="text-2xl font-bold text-slate-800">Global Candidate Directory</h2>
-            <p className="text-slate-500 mt-1">Browse and filter {candidates.length} AI-verified developer capability profiles.</p>
+            <h2 className="text-3xl font-black text-white tracking-tight drop-shadow-md">Global Candidates</h2>
+            <p className="text-indigo-200 font-medium mt-1">Browse and instantly filter {candidates.length} AI-verified engineering profiles.</p>
           </div>
           
-          <div className="relative w-full md:w-96">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-slate-400" />
+          <div className="relative w-full md:w-96 group/search">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-indigo-300 group-focus-within/search:text-indigo-600 transition-colors" />
             </div>
             <input
               type="text"
               value={searchQuery}
               onChange={handleSearch}
-              className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-medium"
-              placeholder="Search by skill, capability, or name..."
+              className="block w-full pl-12 pr-4 py-3.5 border-none rounded-2xl leading-5 bg-white/10 backdrop-blur-md text-white placeholder-indigo-200 focus:outline-none focus:bg-white focus:text-slate-800 transition-all shadow-inner font-semibold"
+              placeholder="Search by exact skill, capability, or name..."
             />
           </div>
         </div>
@@ -80,47 +81,50 @@ function Candidates() {
           <Activity className="w-8 h-8 text-indigo-500 animate-spin" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative z-10">
           {filteredCandidates.map((candidate, idx) => (
-            <div key={candidate._id || idx} className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all group">
-              <div className="flex items-start justify-between">
+            <div key={candidate._id || idx} className="bg-white rounded-3xl border border-indigo-50 p-6 shadow-md hover:shadow-2xl hover:-translate-y-2 hover:border-indigo-200 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+              
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-50 to-transparent rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+
+              <div className="flex items-start justify-between z-10">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center border border-indigo-50 flex-shrink-0">
-                    <UserCircle className="w-8 h-8 text-indigo-600" />
+                  <div className="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/30 transform group-hover:rotate-12 transition-transform duration-300">
+                    {candidate.user?.name ? candidate.user.name.substring(0, 2).toUpperCase() : <UserCircle className="w-8 h-8 opacity-80" />}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                    <h3 className="text-2xl font-black text-slate-800 group-hover:text-indigo-600 transition-colors">
                       {candidate.user?.name || 'Anonymous Developer'}
                     </h3>
-                    <div className="flex items-center space-x-4 mt-1 text-sm text-slate-500">
-                      <span className="flex items-center"><MapPin className="w-4 h-4 mr-1" /> Remote</span>
-                      <span className="flex items-center"><Briefcase className="w-4 h-4 mr-1" /> {candidate.experience?.length || 0} Roles</span>
+                    <div className="flex items-center space-x-4 mt-1 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      <span className="flex items-center bg-slate-50 px-2 py-1 rounded-md"><MapPin className="w-3 h-3 mr-1 text-slate-400" /> Remote Base</span>
+                      <span className="flex items-center bg-slate-50 px-2 py-1 rounded-md"><Briefcase className="w-3 h-3 mr-1 text-slate-400" /> {candidate.experience?.length || 0} Ex. Nodes</span>
                     </div>
                   </div>
                 </div>
-                <button className="p-2 bg-slate-50 text-slate-400 rounded-lg group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
-                  <ChevronRight className="w-5 h-5" />
+                <button className="p-3 bg-indigo-50 text-indigo-400 rounded-xl group-hover:bg-indigo-600 group-hover:text-white group-hover:shadow-lg transition-all duration-300 hover:scale-110">
+                  <ChevronRight className="w-5 h-5 font-black" />
                 </button>
               </div>
 
-              <div className="mt-6">
-                <p className="text-sm font-semibold text-slate-700 mb-3 flex items-center">
+              <div className="mt-8 pt-6 border-t border-slate-100 z-10 bg-gradient-to-b from-transparent to-slate-50/50 -mx-6 px-6 -mb-6 pb-6">
+                <p className="text-xs font-black tracking-widest uppercase text-slate-400 mb-3 flex items-center">
                   <FileText className="w-4 h-4 mr-2 text-indigo-400" />
-                  Extracted Competencies
+                  AI Computed Competencies
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {candidate.skills && candidate.skills.slice(0, 6).map((skill, sIdx) => (
-                    <span key={sIdx} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold border border-indigo-100">
+                    <span key={sIdx} className="px-3 py-1.5 bg-white text-indigo-700 rounded-lg text-xs font-bold border border-indigo-100 shadow-sm group-hover:border-indigo-200 transition-colors">
                       {skill}
                     </span>
                   ))}
                   {candidate.skills && candidate.skills.length > 6 && (
-                    <span className="px-3 py-1 bg-slate-50 text-slate-500 rounded-lg text-xs font-bold border border-slate-200">
+                    <span className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200 shadow-inner">
                       +{candidate.skills.length - 6} more
                     </span>
                   )}
                   {(!candidate.skills || candidate.skills.length === 0) && (
-                    <span className="text-xs text-slate-400 font-medium">Pending AI Analysis</span>
+                    <span className="text-xs text-slate-400 font-medium bg-slate-50 px-3 py-1 rounded-lg">Pending Extraction Sequence</span>
                   )}
                 </div>
               </div>

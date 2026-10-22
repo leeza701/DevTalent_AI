@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Briefcase, Code, FileText, UserPlus, FileCheck, Search, Users, Activity, BarChart, Settings, LogOut } from 'lucide-react';
+import { Briefcase, Code, FileText, UserPlus, FileCheck, Search, Users, Activity, BarChart, Settings, LogOut, Trophy } from 'lucide-react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 function Dashboard({ children }) {
   const { user, logout } = useContext(AuthContext);
@@ -13,7 +13,7 @@ function Dashboard({ children }) {
 
   useEffect(() => {
     // Check backend health
-    axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/health`)
+    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/health`)
       .then(response => {
         if (response.data.status === 'ok') {
           setHealthStatus('Backend Connected: OK');
@@ -29,7 +29,7 @@ function Dashboard({ children }) {
       try {
         const token = localStorage.getItem('devtalent_token');
         if (token) {
-          const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/stats`, {
+          const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/stats`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (res.data.success) {
@@ -44,65 +44,141 @@ function Dashboard({ children }) {
     fetchStats();
   }, []);
 
-  let navItems = [{ name: 'Dashboard', path: '/', icon: <Activity className="w-5 h-5 mr-3" /> }];
-  
+  // Group navigation items by category for structured layout
+  let categories = [];
   if (user?.role === 'recruiter') {
-    navItems = navItems.concat([
-      { name: 'Candidates', path: '/candidates', icon: <UserPlus className="w-5 h-5 mr-3" /> },
-      { name: 'Team Builder', path: '/team-builder', icon: <Users className="w-5 h-5 mr-3" /> },
-      { name: 'Jobs', path: '/jobs', icon: <Briefcase className="w-5 h-5 mr-3" /> },
-      { name: 'Semantic Search', path: '/search', icon: <Search className="w-5 h-5 mr-3" /> },
-      { name: 'Custom Assessments', path: '/create-assessment', icon: <Code className="w-5 h-5 mr-3" /> },
-      { name: 'Analytics', path: '/analytics', icon: <BarChart className="w-5 h-5 mr-3" /> },
-    ]);
+    categories = [
+      {
+        title: 'OVERVIEW',
+        items: [
+          { name: 'Dashboard', path: '/', icon: <Activity className="w-4 h-4 text-sky-400" /> },
+          { name: 'Leaderboard', path: '/leaderboard', icon: <Trophy className="w-4 h-4 text-amber-400" /> },
+        ]
+      },
+      {
+        title: 'RECRUITMENT & SOURCING',
+        items: [
+          { name: 'Candidates', path: '/candidates', icon: <UserPlus className="w-4 h-4 text-indigo-400" /> },
+          { name: 'Semantic Search', path: '/search', icon: <Search className="w-4 h-4 text-cyan-400" /> },
+          { name: 'Team Builder', path: '/team-builder', icon: <Users className="w-4 h-4 text-purple-400" /> },
+        ]
+      },
+      {
+        title: 'REQUISITIONS & TESTS',
+        items: [
+          { name: 'Jobs Architecture', path: '/jobs', icon: <Briefcase className="w-4 h-4 text-blue-400" /> },
+          { name: 'Assessments Studio', path: '/create-assessment', icon: <Code className="w-4 h-4 text-rose-400" /> },
+          { name: 'Analytics', path: '/analytics', icon: <BarChart className="w-4 h-4 text-emerald-400" /> },
+        ]
+      }
+    ];
   } else {
-    // Default to Developer Role layout
-    navItems = navItems.concat([
-      { name: 'Capability Profiles', path: '/profile', icon: <FileCheck className="w-5 h-5 mr-3" /> },
-      { name: 'Resumes', path: '/resumes', icon: <FileText className="w-5 h-5 mr-3" /> },
-      { name: 'Assessments', path: '/assessments', icon: <Code className="w-5 h-5 mr-3" /> },
-    ]);
+    categories = [
+      {
+        title: 'OVERVIEW',
+        items: [
+          { name: 'Dashboard', path: '/', icon: <Activity className="w-4 h-4 text-sky-400" /> },
+          { name: 'Leaderboard', path: '/leaderboard', icon: <Trophy className="w-4 h-4 text-amber-400" /> },
+        ]
+      },
+      {
+        title: 'MY PORTFOLIO',
+        items: [
+          { name: 'Capability Profile', path: '/profile', icon: <FileCheck className="w-4 h-4 text-indigo-400" /> },
+          { name: 'Resume Ingestor', path: '/resumes', icon: <FileText className="w-4 h-4 text-purple-400" /> },
+          { name: 'Code Assessments', path: '/assessments', icon: <Code className="w-4 h-4 text-rose-400" /> },
+        ]
+      }
+    ];
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* Sidebar sidebar */}
-      <div className="w-64 bg-white border-r border-slate-200 flex flex-col">
-        <div className="flex items-center justify-center py-6 px-4 border-b border-slate-100">
-          <div className="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent transform hover:scale-105 transition-transform duration-300">
-            DevTalent AI
+    <div className="flex h-screen bg-slate-100 overflow-hidden font-sans">
+      {/* Floating Glassmorphic Sidebar Layout */}
+      <aside className="my-3 ml-3 w-64 bg-slate-900 text-slate-300 rounded-3xl border border-slate-800 flex flex-col justify-between shadow-[0_10px_40px_rgba(0,0,0,0.25)] relative z-20 overflow-hidden shrink-0">
+        
+        {/* Decorative Ambient Background Blur */}
+        <div className="absolute top-[-50px] left-[-50px] w-40 h-40 bg-indigo-600 opacity-20 rounded-full blur-[60px] pointer-events-none"></div>
+        <div className="absolute bottom-[-50px] right-[-50px] w-40 h-40 bg-purple-600 opacity-15 rounded-full blur-[60px] pointer-events-none"></div>
+
+        <div>
+          {/* Top Brand Header */}
+          <div className="flex items-center space-x-3 px-5 py-5 border-b border-slate-800/80 relative z-10">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.5)] transform hover:scale-105 transition-transform cursor-pointer">
+              <Code className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <div className="text-lg font-black text-white tracking-tight leading-none">
+                DevTalent <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">AI</span>
+              </div>
+              <span className="text-[9px] font-black uppercase tracking-wider text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded-md border border-indigo-400/20 mt-1 inline-block">
+                {user?.role === 'recruiter' ? 'Recruiter Suite' : 'Developer Engine'}
+              </span>
+            </div>
+          </div>
+
+          {/* Categorized Navigation Sections */}
+          <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-210px)] relative z-10">
+            {categories.map((cat, idx) => (
+              <div key={idx} className="space-y-1">
+                <p className="px-3 text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1.5">{cat.title}</p>
+                {cat.items.map((item) => {
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <button 
+                      key={item.name}
+                      onClick={() => navigate(item.path)}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 group ${
+                        isActive
+                          ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white shadow-[0_4px_15px_rgba(99,102,241,0.4)] translate-x-1' 
+                          : 'hover:bg-slate-800/60 hover:text-white text-slate-400 hover:translate-x-1'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`p-1.5 rounded-lg transition-colors ${isActive ? 'bg-white/20' : 'bg-slate-800/80 group-hover:bg-slate-700'}`}>
+                          {item.icon}
+                        </div>
+                        <span className="truncate">{item.name}</span>
+                      </div>
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_white]"></span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </nav>
+        </div>
+
+        {/* Bottom Profile & Settings Card */}
+        <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 relative z-10">
+          <div className="bg-slate-900/90 border border-slate-800 p-2.5 rounded-2xl flex items-center justify-between shadow-inner">
+            <div className="flex items-center space-x-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black text-xs shadow-md shrink-0">
+                {user?.name ? user.name.substring(0, 2).toUpperCase() : 'AI'}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-black text-white truncate">{user?.name || 'User'}</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate">{user?.role || 'Guest'}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-1 shrink-0">
+              <Link 
+                to="/settings" 
+                title="Settings"
+                className={`p-1.5 rounded-lg transition-all ${
+                  location.pathname === '/settings' 
+                    ? 'bg-indigo-600 text-white' 
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
-        
-        <nav className="flex-1 overflow-y-auto pt-4 pb-4">
-          <ul className="space-y-1">
-            {navItems.map((item, index) => (
-              <li key={item.name} className="px-3">
-                <button 
-                  onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group
-                    ${location.pathname === item.path
-                      ? 'bg-blue-50 text-blue-700 shadow-sm' 
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600'
-                    }`}
-                >
-                  <span className={`${location.pathname === item.path ? 'text-blue-600' : 'text-slate-400 group-hover:text-blue-500'} transition-colors duration-200`}>
-                    {item.icon}
-                  </span>
-                  {item.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        
-        <div className="p-4 border-t border-slate-200">
-          <a href="#" className="flex items-center px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-xl transition-colors duration-200 group">
-            <Settings className="w-5 h-5 mr-3 text-slate-400 group-hover:text-blue-500" />
-            Settings
-          </a>
-        </div>
-      </div>
+      </aside>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">

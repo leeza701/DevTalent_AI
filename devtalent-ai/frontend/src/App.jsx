@@ -14,6 +14,8 @@ import Assessments from './pages/Assessments';
 import CreateAssessment from './pages/CreateAssessment';
 import Analytics from './pages/Analytics';
 import TeamBuilder from './pages/TeamBuilder';
+import Leaderboard from './pages/Leaderboard';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -56,6 +58,16 @@ function App() {
               <ProtectedRoute allowedRoles={['developer']}>
                 <Dashboard>
                   <Assessments />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/leaderboard" 
+            element={
+              <ProtectedRoute allowedRoles={['developer', 'recruiter']}>
+                <Dashboard>
+                  <Leaderboard />
                 </Dashboard>
               </ProtectedRoute>
             } 
@@ -116,6 +128,16 @@ function App() {
               <ProtectedRoute allowedRoles={['recruiter']}>
                 <Dashboard>
                   <Candidates />
+                </Dashboard>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute allowedRoles={['recruiter', 'developer']}>
+                <Dashboard>
+                  <Settings />
                 </Dashboard>
               </ProtectedRoute>
             } 

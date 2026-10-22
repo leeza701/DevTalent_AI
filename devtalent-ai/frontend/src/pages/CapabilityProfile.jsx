@@ -17,7 +17,7 @@ function CapabilityProfile() {
     try {
       setLoading(true);
       const token = localStorage.getItem('devtalent_token');
-      const response = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/resumes/me`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/resumes/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -71,38 +71,41 @@ function CapabilityProfile() {
     <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-500">
       
       {/* Header Profile Section */}
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden relative">
-        <div className="h-32 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
-        <div className="px-8 pb-8">
-          <div className="relative flex justify-between items-end -mt-12 mb-6">
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-900 rounded-[2rem] shadow-2xl border border-indigo-500/30 overflow-hidden relative group">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-20 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000"></div>
+        </div>
+        <div className="px-10 pb-10 relative z-10">
+          <div className="relative flex justify-between items-end -mt-16 mb-8">
             <div className="flex items-end space-x-6">
-              <div className="w-24 h-24 bg-white p-1.5 rounded-2xl shadow-md border border-slate-100">
-                <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl flex items-center justify-center">
-                  <User className="w-10 h-10 text-indigo-400" />
+              <div className="w-32 h-32 bg-slate-900 p-2 rounded-3xl shadow-2xl border border-indigo-500/50 transform group-hover:-translate-y-2 group-hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all duration-300">
+                <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                  <User className="w-14 h-14 text-white drop-shadow-md" />
                 </div>
               </div>
-              <div className="pb-1">
-                <h1 className="text-3xl font-bold text-slate-900">{user?.name}</h1>
-                <p className="text-indigo-600 font-medium tracking-wide">AI-Extracted Capability Rank</p>
+              <div className="pb-2">
+                <h1 className="text-4xl font-black text-white tracking-tight drop-shadow-md">{user?.name}</h1>
+                <p className="text-indigo-300 font-bold tracking-widest uppercase text-sm mt-1">Capability Rank</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2 bg-emerald-50 px-4 py-2 rounded-lg border border-emerald-100">
-              <Activity className="w-4 h-4 text-emerald-600" />
-              <span className="text-sm font-bold text-emerald-700">Verified Profile</span>
+            <div className="flex items-center space-x-2 bg-emerald-500/20 px-5 py-2.5 rounded-xl border border-emerald-400/50 backdrop-blur-sm shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+              <Activity className="w-5 h-5 text-emerald-400" />
+              <span className="text-sm font-black uppercase tracking-widest text-emerald-300">Verified Profile</span>
             </div>
           </div>
           
-          <div className="flex items-center space-x-6 text-slate-500 text-sm">
-            <div className="flex items-center">
+          <div className="flex items-center space-x-6 text-indigo-200 text-sm font-medium">
+            <div className="flex items-center bg-white/5 px-4 py-2 rounded-lg border border-white/10 shadow-inner">
               <Mail className="w-4 h-4 mr-2" />
               {user?.email}
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center bg-white/5 px-4 py-2 rounded-lg border border-white/10 shadow-inner">
               <MapPin className="w-4 h-4 mr-2" />
-              Remote
+              Remote Vector Array
             </div>
-            <div className="flex items-center bg-slate-100 px-3 py-1 rounded-full text-slate-600 font-medium">
-              Source: {profile.fileName}
+            <div className="flex items-center bg-indigo-500/20 px-4 py-2 rounded-lg border border-indigo-400/30 text-indigo-300 font-bold shadow-inner">
+              Source Origin: {profile.fileName}
             </div>
           </div>
         </div>
@@ -113,24 +116,24 @@ function CapabilityProfile() {
         
         {/* Left Column (Skills) */}
         <div className="lg:col-span-1 space-y-8">
-          <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+          <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 hover:-translate-y-1 transition-transform duration-300">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="p-2 bg-blue-50 rounded-lg">
-                <Award className="w-5 h-5 text-blue-600" />
+              <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-md">
+                <Award className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-800">Core Technologies</h3>
+              <h3 className="text-2xl font-black text-slate-800 tracking-tight">Tech Stack Matrix</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {profile.skills && profile.skills.map((skill, index) => (
                 <span 
                   key={index} 
-                  className="px-4 py-2 bg-slate-50 border border-slate-100 text-slate-700 rounded-xl font-medium text-sm hover:shadow-md hover:border-blue-200 hover:text-blue-700 transition-all cursor-default"
+                  className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-sm shadow-sm hover:shadow-md hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-default"
                 >
                   {skill}
                 </span>
               ))}
               {(!profile.skills || profile.skills.length === 0) && (
-                <p className="text-sm text-slate-400">No specific technologies mapped.</p>
+                <p className="text-sm font-bold italic text-slate-400">Processing skills...</p>
               )}
             </div>
           </div>
@@ -142,10 +145,13 @@ function CapabilityProfile() {
             <div className="relative z-10">
               <h3 className="text-xl font-bold text-white mb-3">Take Assessment</h3>
               <p className="text-indigo-200 text-sm leading-relaxed mb-6">
-                Validate your parsed skills with our AI-driven code simulations to stand out to elite recruiters.
+                Validate your skills with our coding tests to stand out to recruiters.
               </p>
-              <button className="w-full bg-white text-indigo-900 py-3 rounded-xl font-bold hover:bg-indigo-50 shadow-lg transition-all">
-                Unlock Phase 9
+              <button 
+                onClick={() => window.location.href = '/assessments'}
+                className="w-full bg-white text-indigo-900 py-3 rounded-xl font-bold hover:bg-indigo-50 shadow-lg transition-all"
+              >
+                Launch Code Assessment
               </button>
             </div>
           </div>
@@ -154,29 +160,29 @@ function CapabilityProfile() {
         {/* Right Column (Experience & Ed) */}
         <div className="lg:col-span-2 space-y-8">
           
-          <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="p-2 bg-purple-50 rounded-lg">
-                <Briefcase className="w-5 h-5 text-purple-600" />
+          <div className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 p-10">
+            <div className="flex items-center space-x-4 mb-10">
+              <div className="p-3 bg-gradient-to-br from-purple-500 to-fuchsia-600 rounded-xl shadow-md">
+                <Briefcase className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-800">Professional Experience</h3>
+              <h3 className="text-3xl font-black text-slate-800 tracking-tight">Professional History</h3>
             </div>
             
-            <div className="space-y-8 pl-4 border-l-2 border-slate-100 ml-4 relative">
+            <div className="space-y-10 pl-6 border-l-4 border-slate-100 ml-4 relative">
               {profile.experience && profile.experience.length > 0 ? profile.experience.map((exp, index) => (
-                <div key={index} className="relative">
-                  <div className="absolute -left-[29px] top-1 w-4 h-4 bg-white border-2 border-purple-400 rounded-full"></div>
-                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6 hover:shadow-md transition-shadow">
-                    <h4 className="text-lg font-bold text-slate-900">{exp.title}</h4>
-                    <p className="text-purple-600 font-medium mb-2">{exp.company}</p>
-                    <div className="flex items-center space-x-2 text-xs font-semibold text-slate-500 bg-white px-3 py-1 rounded-md border border-slate-200 w-max">
-                      <Activity className="w-3 h-3" />
+                <div key={index} className="relative group">
+                  <div className="absolute -left-[35px] top-2 w-6 h-6 bg-white border-4 border-purple-500 rounded-full group-hover:scale-125 transition-transform duration-300 shadow-md"></div>
+                  <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 hover:shadow-[0_10px_30px_rgba(168,85,247,0.15)] hover:border-purple-200 transition-all duration-300">
+                    <h4 className="text-2xl font-black text-slate-900 group-hover:text-purple-700 transition-colors">{exp.title}</h4>
+                    <p className="text-purple-600 font-bold uppercase tracking-widest text-sm mb-4 mt-1">{exp.company}</p>
+                    <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-slate-500 bg-white px-4 py-2 rounded-xl border border-slate-200 w-max shadow-sm">
+                      <Activity className="w-4 h-4 text-purple-400" />
                       <span>{exp.years}</span>
                     </div>
                   </div>
                 </div>
               )) : (
-                <p className="text-sm text-slate-400">No experience records mapped.</p>
+                <p className="text-sm font-bold text-slate-400">No experience records mapped.</p>
               )}
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Briefcase, ChevronRight, Award, MapPin, User, ChevronDown } from 'lucide-react';
+import { Search, Briefcase, ChevronRight, Award, MapPin, User, ChevronDown, Activity } from 'lucide-react';
 
 const SemanticSearch = () => {
   const [jobs, setJobs] = useState([]);
@@ -14,7 +14,7 @@ const SemanticSearch = () => {
     const fetchJobs = async () => {
       try {
         const token = localStorage.getItem('devtalent_token');
-        const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/jobs`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/jobs`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setJobs(res.data.data);
@@ -32,7 +32,7 @@ const SemanticSearch = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('devtalent_token');
-      const res = await axios.get(`\${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/matches/${selectedJob}`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/matches/${selectedJob}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMatches(res.data.data);
@@ -47,42 +47,45 @@ const SemanticSearch = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Search Header */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8">
-        <div className="flex items-center mb-6">
-          <div className="bg-blue-100 p-3 rounded-xl mr-4">
-            <Search className="w-8 h-8 text-blue-600" />
+      <div className="bg-gradient-to-br from-slate-900 to-indigo-900 rounded-3xl border border-indigo-800/50 shadow-2xl p-10 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500 opacity-20 rounded-full blur-[100px] transform translate-x-1/3 -translate-y-1/2 group-hover:bg-purple-500 transition-colors duration-1000"></div>
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        
+        <div className="flex items-center mb-10 relative z-10">
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 mr-6 shadow-lg shadow-indigo-500/20 group-hover:rotate-6 transition-transform">
+            <Search className="w-10 h-10 text-indigo-300" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Semantic Matching Engine</h2>
-            <p className="text-gray-500 mt-1">Select a Target Job Requisition to instantly rank all parsed candidates.</p>
+            <h2 className="text-4xl font-black text-white tracking-tight drop-shadow-md">Semantic Matching Engine</h2>
+            <p className="text-indigo-200 mt-2 text-lg font-medium max-w-2xl">Use our AI to automatically match developers to your open jobs based on their skills and experience.</p>
           </div>
         </div>
         
-        <form onSubmit={handleSearch} className="flex gap-4 items-end">
-          <div className="flex-1">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Target Job</label>
+        <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4 items-end relative z-10">
+          <div className="flex-1 w-full relative group/input">
+            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-widest mb-3">Requisition Target Sequence</label>
             <div className="relative">
               <select
                 value={selectedJob}
                 onChange={(e) => setSelectedJob(e.target.value)}
-                className="w-full appearance-none px-4 py-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 font-medium cursor-pointer"
+                className="w-full appearance-none px-6 py-5 rounded-2xl border border-white/10 hover:border-indigo-400 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-400 bg-white/5 backdrop-blur-md text-white font-bold cursor-pointer transition-all shadow-inner"
               >
-                <option value="" disabled>-- Select a Job to Analyze --</option>
+                <option value="" disabled className="text-slate-800">-- Initialize Target Pipeline --</option>
                 {jobs.map(job => (
-                  <option key={job._id} value={job._id}>{job.title} - {job.company}</option>
+                  <option key={job._id} value={job._id} className="text-slate-800">{job.title} - {job.company}</option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                <ChevronDown className="w-5 h-5" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-6 text-indigo-300 group-hover/input:text-white transition-colors">
+                <ChevronDown className="w-6 h-6" />
               </div>
             </div>
           </div>
           <button
             type="submit"
             disabled={!selectedJob || loading}
-            className="h-[58px] px-8 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-all flex items-center"
+            className="h-[68px] px-10 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-black rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center transform hover:-translate-y-1"
           >
-            {loading ? 'Matching...' : 'Run Analysis'}
+            {loading ? <span className="flex items-center justify-center animate-pulse"><Search className="w-5 h-5 mr-2" /> Searching...</span> : 'Find Best Candidates'}
           </button>
         </form>
       </div>
