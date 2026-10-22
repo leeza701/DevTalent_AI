@@ -11,32 +11,38 @@ const matchRoutes = require('./routes/matchRoutes');
 const assessmentRoutes = require('./routes/assessmentRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 
-
 connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-  'https://devtalent-ai-frontend.onrender.com',
-  'http://localhost:5173',
-  'http://localhost:3000',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
+// --- CORS Setup ---
+// Manually set CORS headers FIRST before anything else
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  // Always allow the Render frontend and localhost
+  const allowed = [
+    'https://devtalent-ai-frontend.onrender.com',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL,
+  ].filter(Boolean);
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true); // Allow all for now, restrict later if needed
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-app.use(cors(corsOptions));
+  if (!origin || allowed.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', origin); // allow all in dev
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
+  // Handle preflight immediately
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
